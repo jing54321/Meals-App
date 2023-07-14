@@ -1,11 +1,19 @@
-import React from 'react';
+import { useLayoutEffect } from 'react';
 import { StyleSheet, View, FlatList, Pressable, Text } from 'react-native';
-import { MEALS } from '../data/dummy-data';
+import { MEALS, CATEGORIES } from '../data/dummy-data';
 import MealItem from '../Components/MealItem';
 
-const MealsOverViewScreen = ({ route }) => {
+const MealsOverViewScreen = ({ route, navigation }) => {
   const { categoryId } = route.params;
+
   const displayedMeals = MEALS.filter(meal => meal.categoryIds.includes(categoryId));
+
+  useLayoutEffect(() => {
+    const title = CATEGORIES.find(c => c.id === categoryId).title;
+    navigation.setOptions({
+      title: title,
+    });
+  }, [categoryId, navigation]);
 
   return (
     <View style={styles.container}>

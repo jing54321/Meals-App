@@ -3,10 +3,19 @@ import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { useNavigation } from '@react-navigation/native';
 const MealItem = ({ meal }) => {
+  const navigation = useNavigation();
   return (
-    <Pressable style={({ pressed }) => [styles.itemContainer, pressed && styles.buttonPressed]} android_ripple={{ color: '#e2d2d2' }}>
+    <Pressable
+      style={({ pressed }) => [styles.itemContainer, pressed && styles.buttonPressed]}
+      android_ripple={{ color: '#fff' }}
+      onPress={() =>
+        navigation.navigate('Meals Detail', {
+          meal: meal,
+        })
+      }
+    >
       <Image src={meal.imageUrl} style={styles.image} />
       <View>
         <Text style={styles.text}>{meal.title}</Text>
