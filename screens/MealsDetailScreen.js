@@ -1,14 +1,20 @@
-import { useLayoutEffect } from 'react';
-import { StyleSheet, View, Text, Image, FlatList } from 'react-native';
+import { useLayoutEffect, useState } from 'react';
+import { StyleSheet, View, Text, Image, FlatList, Button } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import IconButton from '../Components/IconButton';
 
 const MealsDetailScreen = ({ route, navigation }) => {
   const { meal } = route.params;
+
+  const headerButtonHandler = () => {
+    console.log('click');
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       title: meal.title,
+      headerRight: () => <IconButton onPress={headerButtonHandler} color={'white'} icon={'star'} />,
     });
   }, [navigation, meal]);
 
@@ -41,6 +47,7 @@ const MealsDetailScreen = ({ route, navigation }) => {
           <Text style={[styles.title, { textDecorationLine: 'underline' }]}>Directions</Text>
           <FlatList
             data={meal.steps}
+            keyExtractor={item => item}
             renderItem={data => (
               <View style={{ flexDirection: 'row', gap: 3, marginBottom: 8 }}>
                 <Text>{data.index + 1}.</Text>

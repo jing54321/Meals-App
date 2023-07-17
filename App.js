@@ -1,13 +1,53 @@
+import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Ionicons } from '@expo/vector-icons';
 import CategoryScreen from './screens/CategoryScreen';
 import MealsOverViewScreen from './screens/MealsOverViewScreen';
 import MealsDetailScreen from './screens/MealsDetailScreen';
-import { CATEGORIES } from './data/dummy-data';
+import FavoriteScreen from './screens/FavoriteScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#351401' },
+        headerTintColor: '#fff',
+        sceneContainerStyle: { backgroundColor: '#c46352' },
+        headerTitleAlign: 'center',
+        headerBackTitleVisible: false,
+        drawerContentContainerStyle: { backgroundColor: '#469b4c' },
+        drawerContentStyle: { backgroundColor: '#d6d0b8' },
+        drawerActiveBackgroundColor: 'transparent',
+        drawerActiveTintColor: '#fff',
+        drawerInactiveTintColor: '#fff',
+      }}
+    >
+      <Drawer.Screen
+        name="categories"
+        component={CategoryScreen}
+        options={{
+          title: 'All Categories',
+          drawerIcon: ({ color, size }) => <Ionicons name="home" color={color} size={size} />,
+        }}
+      />
+      <Drawer.Screen
+        name="favorites"
+        component={FavoriteScreen}
+        options={{
+          title: 'Favorites',
+          drawerIcon: ({ color, size }) => <Ionicons name="star" color={color} size={size} />,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+};
 
 const App = () => {
   return (
@@ -25,23 +65,13 @@ const App = () => {
           }}
         >
           <Stack.Screen
-            name="Meals Categories"
-            component={CategoryScreen}
+            name="Drawer"
+            component={DrawerNavigator}
             options={{
-              title: 'All Categories',
+              headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="Meals Overview"
-            component={MealsOverViewScreen}
-            // options={({ route, navigation }) => {
-            //   const { categoryId } = route.params;
-            //   const [category] = CATEGORIES.filter(c => c.id === categoryId);
-            //   return {
-            //     title: category.title,
-            //   };
-            // }}
-          />
+          <Stack.Screen name="Meals Overview" component={MealsOverViewScreen} />
           <Stack.Screen name="Meals Detail" component={MealsDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
