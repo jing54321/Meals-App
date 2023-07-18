@@ -1,22 +1,37 @@
-import { useLayoutEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, FlatList, Button } from 'react-native';
+import { useLayoutEffect, useContext } from 'react';
+import { StyleSheet, View, Text, Image, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import IconButton from '../Components/IconButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorites, removeFavorites } from '../Store/redux/favorites';
+//import { FavoriteContext } from '../Store/context/favoriteContext';
 
 const MealsDetailScreen = ({ route, navigation }) => {
   const { meal } = route.params;
+  const { ids } = useSelector(state => state.favoriteMeals);
+  const dispatch = useDispatch();
+  //const favoriteContext = useContext(FavoriteContext);
+  //const { ids, addFavorite, removeFavorite } = favoriteContext;
 
-  const headerButtonHandler = () => {
-    console.log('click');
+  const mealIsFavorite = ids.includes(meal.id);
+
+  const changeFavoriteHandler = () => {
+    if (mealIsFavorite) {
+      //removeFavorite(meal.id);
+      dispatch(removeFavorites({ id: meal.id }));
+    } else {
+      //addFavorite(meal.id);
+      dispatch(addFavorites({ id: meal.id }));
+    }
   };
   useLayoutEffect(() => {
     navigation.setOptions({
       title: meal.title,
-      headerRight: () => <IconButton onPress={headerButtonHandler} color={'white'} icon={'star'} />,
+      headerRight: () => <IconButton onPress={changeFavoriteHandler} color={mealIsFavorite ? 'yellow' : 'white'} icon={'star'} />,
     });
-  }, [navigation, meal]);
+  }, [navigation, meal, mealIsFavorite]);
 
   return (
     <View style={styles.container}>
